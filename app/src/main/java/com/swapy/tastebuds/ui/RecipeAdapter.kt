@@ -14,6 +14,16 @@ import com.swapy.tastebuds.model.Ingredient
 
 class RecipeAdapter(private val meals: List<Meal>) : RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
 
+    private val favoriteStates = mutableMapOf<String, Boolean>()
+
+    init {
+        meals.forEach { meal ->
+            meal.idMeal?.let { id ->
+                favoriteStates[id] = false
+            }
+        }
+    }
+
     class RecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val recipeImage: ImageView = itemView.findViewById(R.id.recipe_image)
         val favoriteIcon: ImageView = itemView.findViewById(R.id.favorite_icon)
@@ -83,8 +93,20 @@ class RecipeAdapter(private val meals: List<Meal>) : RecyclerView.Adapter<Recipe
             // open recipe details
         }
 
+        val isFavorite = meal.idMeal?.let { favoriteStates[it] } ?: false
+        holder.favoriteIcon.setImageResource(
+            if (isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_border
+        )
+
         holder.favoriteIcon.setOnClickListener {
-            holder.favoriteIcon.setImageResource(R.drawable.ic_favorite_filled)
+            meal.idMeal?.let { id ->
+                val currentState = favoriteStates[id] ?: false
+                val newState = !currentState
+                favoriteStates[id] = newState
+                holder.favoriteIcon.setImageResource(
+                    if (newState) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_border
+                )
+            }
         }
     }
 
