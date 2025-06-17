@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="80dp"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:gravity="center"
     android:layout_marginEnd="8dp">
 
-    <!-- Ingredient Image -->
     <ImageView
         android:id="@+id/ingredient_image"
         android:layout_width="60dp"
@@ -17,15 +16,17 @@
         android:src="@drawable/ingredient_placeholder"
         android:background="@drawable/rounded_square_background" />
 
-    <!-- Ingredient Name -->
     <TextView
         android:id="@+id/ingredient_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="60dp"
         tools:text="Sugar Syrup"
         android:textColor="@android:color/darker_gray"
         android:textSize="12sp"
         android:layout_marginTop="4dp"
-        android:gravity="center" />
+        android:gravity="center"
+        android:maxLines="2"
+        android:ellipsize="end" />
 
 </LinearLayout>
