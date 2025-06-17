@@ -1,4 +1,4 @@
-package com.swapy.tastebuds.ui
+package com.swapy.tastebuds.ui.main
 
 import android.view.LayoutInflater
 import android.view.View
