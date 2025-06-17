@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.swapy.tastebuds.R
 import com.swapy.tastebuds.model.Ingredient
 
@@ -23,8 +24,13 @@ class IngredientAdapter(private val ingredients: List<Ingredient>) : RecyclerVie
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         val ingredient = ingredients[position]
-        holder.ingredientImage.setImageResource(ingredient.imageResId)
         holder.ingredientName.text = ingredient.name
+
+        Glide.with(holder.ingredientImage.context)
+            .load(ingredient.imageUrl)
+            .placeholder(R.drawable.ingredient_placeholder)
+            .error(R.drawable.ingredient_placeholder)
+            .into(holder.ingredientImage)
     }
 
     override fun getItemCount(): Int = ingredients.size

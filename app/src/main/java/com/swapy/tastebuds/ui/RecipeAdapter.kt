@@ -11,10 +11,13 @@ import com.bumptech.glide.Glide
 import com.swapy.tastebuds.model.Meal
 import com.swapy.tastebuds.R
 import com.swapy.tastebuds.model.Ingredient
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 class RecipeAdapter(private val meals: List<Meal>) : RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
 
     private val favoriteStates = mutableMapOf<String, Boolean>()
+    private val baseIngredientImageUrl = "https://www.themealdb.com/images/ingredients/"
 
     init {
         meals.forEach { meal ->
@@ -76,9 +79,18 @@ class RecipeAdapter(private val meals: List<Meal>) : RecyclerView.Adapter<Recipe
         )
 
         ingredientFields.forEach { (ingredient, measure) ->
+
             if (ingredient?.isNotBlank() == true && ingredient != "null") {
-                val displayName = if (measure?.isNotBlank() == true && measure != "null") "$ingredient - $measure" else ingredient
-                ingredients.add(Ingredient(displayName.toString(), R.drawable.ingredient_placeholder))
+                val displayName = if (measure?.isNotBlank() == true && measure != "null") {
+                    "$ingredient - $measure"
+                } else {
+                    ingredient
+                }
+
+                val ingredientNameForUrl = ingredient.lowercase().replace(" ", "-")
+                val encodedIngredientName = URLEncoder.encode(ingredientNameForUrl, StandardCharsets.UTF_8.toString())
+                val imageUrl = "$baseIngredientImageUrl$encodedIngredientName.png"
+                ingredients.add(Ingredient(displayName, imageUrl))
             }
         }
 
