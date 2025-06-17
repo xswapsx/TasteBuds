@@ -20,12 +20,15 @@
             android:id="@+id/recipe_image"
             android:layout_width="match_parent"
             android:layout_height="180dp"
+            android:background="@drawable/rounded_image"
             android:contentDescription="@null"
             android:scaleType="centerCrop"
+            android:clipToOutline="true"
             android:src="@drawable/recipe_image_placeholder"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:targetApi="31" />
 
         <ImageView
             android:contentDescription="@null"
