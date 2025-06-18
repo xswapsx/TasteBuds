@@ -14,7 +14,8 @@ import com.swapy.tastebuds.model.Ingredient
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-class RecipeAdapter(private val meals: List<Meal>) : RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
+class RecipeAdapter(private val meals: List<Meal>, private val onViewMoreClicked: (Meal) -> Unit) :
+    RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
 
     private val favoriteStates = mutableMapOf<String, Boolean>()
     private val baseIngredientImageUrl = "https://www.themealdb.com/images/ingredients/"
@@ -33,11 +34,13 @@ class RecipeAdapter(private val meals: List<Meal>) : RecyclerView.Adapter<Recipe
         val recipeTitle: TextView = itemView.findViewById(R.id.recipe_title)
         val recipeDescription: TextView = itemView.findViewById(R.id.recipe_description)
         val viewMore: TextView = itemView.findViewById(R.id.view_more)
-        val ingredientsRecyclerView: RecyclerView = itemView.findViewById(R.id.ingredients_recycler_view)
+        val ingredientsRecyclerView: RecyclerView =
+            itemView.findViewById(R.id.ingredients_recycler_view)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_recipe_card, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_recipe_card, parent, false)
         return RecipeViewHolder(view)
     }
 
@@ -51,7 +54,8 @@ class RecipeAdapter(private val meals: List<Meal>) : RecyclerView.Adapter<Recipe
 
         holder.recipeTitle.text = meal.strMeal
 
-        val description = meal.strInstructions?.take(60) + meal.strInstructions?.length?.let { if (it > 60) "..." else "" }
+        val description =
+            meal.strInstructions?.take(60) + meal.strInstructions?.length?.let { if (it > 60) "..." else "" }
         holder.recipeDescription.text = description
 
         val ingredients = mutableListOf<Ingredient>()
@@ -88,7 +92,8 @@ class RecipeAdapter(private val meals: List<Meal>) : RecyclerView.Adapter<Recipe
                 }
 
                 val ingredientNameForUrl = ingredient.lowercase().replace(" ", "-")
-                val encodedIngredientName = URLEncoder.encode(ingredientNameForUrl, StandardCharsets.UTF_8.toString())
+                val encodedIngredientName =
+                    URLEncoder.encode(ingredientNameForUrl, StandardCharsets.UTF_8.toString())
                 val imageUrl = "$baseIngredientImageUrl$encodedIngredientName.png"
                 ingredients.add(Ingredient(displayName, imageUrl))
             }
@@ -103,6 +108,7 @@ class RecipeAdapter(private val meals: List<Meal>) : RecyclerView.Adapter<Recipe
 
         holder.viewMore.setOnClickListener {
             // open recipe details
+            meal.idMeal?.let { onViewMoreClicked(meal) }
         }
 
         val isFavorite = meal.idMeal?.let { favoriteStates[it] } ?: false

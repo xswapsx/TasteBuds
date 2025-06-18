@@ -1,5 +1,6 @@
 package com.swapy.tastebuds.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -12,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.swapy.tastebuds.R
 import com.swapy.tastebuds.databinding.ActivityMainBinding
+import com.swapy.tastebuds.ui.detail.DetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -21,6 +23,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: RecipesViewModel by viewModels()
     private lateinit var recipeAdapter: RecipeAdapter
+
+    companion object {
+        const val EXTRA_MEAL_DETAILS = "com.swapy.tastebuds.ui.main.MEAL_DETAILS"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +44,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        recipeAdapter = RecipeAdapter(emptyList())
+        recipeAdapter = RecipeAdapter(emptyList()) { meal ->
+//          viewModel.getRecipeDetails(it)
+            Timber.e("from setupRecyclerView $meal.strMeal")
+        }
         binding.recipeRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = recipeAdapter
@@ -73,7 +82,15 @@ class MainActivity : AppCompatActivity() {
                         is RecipesActivityEvents.OnSuccess -> {
                             Timber.d(it.response.toString())
                             if (it.response != null) {
-                                recipeAdapter = RecipeAdapter(it.response.meals)
+                                recipeAdapter = RecipeAdapter(it.response.meals) { meal ->
+//                                    viewModel.getRecipeDetails(it)
+                                    Timber.e("from RecipesActivityEvents.OnSuccess $meal.strMeal")
+                                    val intent =
+                                        Intent(this@MainActivity, DetailsActivity::class.java).apply {
+                                            putExtra(EXTRA_MEAL_DETAILS, meal)
+                                        }
+                                    startActivity(intent)
+                                }
                                 binding.recipeRecyclerView.adapter = recipeAdapter
                             }
                         }
