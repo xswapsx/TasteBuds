@@ -8,6 +8,7 @@ import com.swapy.tastebuds.repository.RecipeRepository
 import com.swapy.tastebuds.ui.main.RecipesActivityEvents
 import com.swapy.tastebuds.ui.main.RecipesViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -32,7 +33,7 @@ class RecipesViewModelTest {
 
     private lateinit var viewModel: RecipesViewModel
 
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
@@ -47,7 +48,7 @@ class RecipesViewModelTest {
     }
 
     @Test
-    fun `emits ShowProgressBar, OnSuccess, and HideProgressBar on success`() = runTest {
+    fun `emits ShowProgressBar, OnSuccess, and HideProgressBar on success`() = runTest(testDispatcher) {
         val fakeResponse = RecipeResponse(
             meals = listOf(
                 Meal(
