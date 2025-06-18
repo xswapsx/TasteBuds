@@ -86,8 +86,11 @@ class DetailsActivity : AppCompatActivity() {
 
         binding.tvDescription.text = meal.strInstructions ?: "No instructions available"
 
-        val ingredientCount = meal.getIngredients().count { it.first?.isNotBlank() == true }
-        binding.tvItemCount.text = "$ingredientCount Item${if (ingredientCount != 1) "s" else ""}"
+        val ingredientCount = meal.getIngredients().count { (ingredient, _) ->
+            ingredient?.isNotBlank() == true && ingredient != "null"
+        }
+        binding.tvItemCount.text =
+            resources.getQuantityString(R.plurals.item_plural, ingredientCount, ingredientCount)
     }
 
     private fun toggleFavorite(meal: Meal) {
