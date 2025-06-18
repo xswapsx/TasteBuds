@@ -1,5 +1,7 @@
 package com.swapy.tastebuds.ui.detail
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -14,6 +16,7 @@ import com.swapy.tastebuds.model.Ingredient
 import com.swapy.tastebuds.model.Meal
 import com.swapy.tastebuds.ui.main.MainActivity
 import timber.log.Timber
+import androidx.core.net.toUri
 
 class DetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailsBinding
@@ -47,6 +50,13 @@ class DetailsActivity : AppCompatActivity() {
 
         binding.btnFavorite.setOnClickListener {
             currentMeal?.let { toggleFavorite(it) }
+        }
+
+        binding.btnViewOnYoutube.setOnClickListener {
+            currentMeal?.let {
+                val intent = Intent(Intent.ACTION_VIEW, it.strYoutube?.toUri())
+                startActivity(intent)
+            }
         }
     }
 
