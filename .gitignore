@@ -17,3 +17,6 @@ local.properties
 /.idea/misc.xml
 /.idea/compiler.xml
 /.idea/androidTestResultsUserPreferences.xml
+/app/release/baselineProfiles/0/app-release.dm
+/app/release/baselineProfiles/1/app-release.dm
+/app/release/output-metadata.json
