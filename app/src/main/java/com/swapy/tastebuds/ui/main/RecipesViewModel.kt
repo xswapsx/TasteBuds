@@ -71,5 +71,4 @@ sealed class RecipesActivityEvents {
     data class ShowFailureMessage(val response: RecipeResponse?, val msg: String?) :
         RecipesActivityEvents()
     data class OnSuccess(val response: RecipeResponse?) : RecipesActivityEvents()
-    data object NavigateToDetailsActivity : RecipesActivityEvents()
 }

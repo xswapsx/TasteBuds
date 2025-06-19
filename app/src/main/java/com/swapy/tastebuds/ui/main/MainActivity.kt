@@ -2,6 +2,7 @@ package com.swapy.tastebuds.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -44,10 +45,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        recipeAdapter = RecipeAdapter(emptyList()) { meal ->
-//          viewModel.getRecipeDetails(it)
-            Timber.e("from setupRecyclerView $meal.strMeal")
-        }
+        recipeAdapter = RecipeAdapter(emptyList()) {}
         binding.recipeRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = recipeAdapter
@@ -62,13 +60,7 @@ class MainActivity : AppCompatActivity() {
                     when (it) {
 
                         RecipesActivityEvents.HideProgressBar -> {
-                            Timber.d("Hide ProgressBar")
-                        }
-
-                        RecipesActivityEvents.NavigateToDetailsActivity -> {
-                            Timber.d("NavigateToDetailsActivity")
-                            /*startActivity(Intent(this@MainActivity, DetailsActivity::class.java))
-                                finish()*/
+                            binding.pbMain.visibility = View.GONE
                         }
 
                         is RecipesActivityEvents.ShowFailureMessage -> {
@@ -76,15 +68,14 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         RecipesActivityEvents.ShowProgressBar -> {
-                            Timber.d("ProgressBar showing")
+                            binding.pbMain.visibility = View.VISIBLE
                         }
 
                         is RecipesActivityEvents.OnSuccess -> {
                             Timber.d(it.response.toString())
                             if (it.response != null) {
                                 recipeAdapter = RecipeAdapter(it.response.meals) { meal ->
-//                                    viewModel.getRecipeDetails(it)
-                                    Timber.e("from RecipesActivityEvents.OnSuccess $meal.strMeal")
+
                                     val intent =
                                         Intent(this@MainActivity, DetailsActivity::class.java).apply {
                                             putExtra(EXTRA_MEAL_DETAILS, meal)
